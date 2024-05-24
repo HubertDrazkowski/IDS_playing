@@ -104,12 +104,39 @@ class finiteIR:
 
         return delta, g_a
 
+# ================================
+# An experiment
+# ================================
+
 # Example usage and reward function
 L, K, N = 5, 3, 4
 p = np.ones(L) / L
 q = np.random.rand(L, K, N)
-R = lambda y: y ** 2  # Define a simple reward function
+R = lambda y: y ** 3  # Define a simple reward function
 model = finiteIR(L, K, N, R, p, q)
 delta, g = model.compute_algorithm_1()
 print("Delta:", delta)
 print("g:", g)
+
+
+q = np.random.rand(L, K, N)
+R = lambda y: y   # Define a simple reward function
+model = finiteIR(L, K, N, R, p, q)
+delta, g = model.compute_algorithm_1()
+print("Delta:", delta)
+print("g:", g)
+print("Psi(Unif) before the sum", delta**2/g)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
