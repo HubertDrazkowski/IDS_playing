@@ -6,7 +6,7 @@ import numpy as np
 class finiteIR:
     """
     Replicates Algorithm 1 from Russo van Roy 2018 IDS
-
+    Assuming R is suitable for vectorization, it is a little bit more fun then
     Args:
         L (int)
         K (int)
@@ -79,10 +79,10 @@ class finiteIR:
 
         # Step 5: Compute R*
         R_star = 0
+        rewards = self.R(np.arange(self.N))
         for a in range(self.K):
-            for y in range(self.N):
-                for theta in Theta_a[a]:
-                    R_star += pa[a, y] * self.q[theta, a, y] *self.R(y)
+            for theta in Theta_a[a]:
+                R_star += self.p[theta] * np.dot(self.q[theta, a, :], rewards)
 
         # Step 6: Compute g_a
         g_a = np.zeros(self.K)
@@ -93,7 +93,7 @@ class finiteIR:
                         pa_joint_val = pa_joint[a, a_star, y]
                         g_a[a] += pa_joint_val * np.log(pa_joint_val / (p_star[a_star] * pa[a, y] + 1e-10))
 
-        # Step 7: Compute Δ_a
+        # Step 7: Compute delta_a
         delta = np.zeros(self.K)
         for a in range(self.K):
             expected_reward = 0
